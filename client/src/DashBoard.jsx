@@ -1,7 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Trash2, Copy, ExternalLink, BarChart2, Loader2 } from 'lucide-react';
+import {
+  Trash2,
+  Copy,
+  ExternalLink,
+  BarChart2,
+  Loader2,
+  Activity,
+} from 'lucide-react';
 
 // API Base URL - change this if you deploy the backend elsewhere
 const API_BASE = 'http://localhost:5000';
@@ -211,6 +218,17 @@ function Dashboard() {
             </table>
           </div>
         </div>
+        <footer className="mt-12 border-t border-gray-100 pt-6 text-center">
+          <p className="text-sm text-gray-400">
+            &copy; {new Date().getFullYear()} TinyLink.
+            <Link
+              to="/healthz"
+              className="ml-4 inline-flex items-center gap-1 hover:text-indigo-600 transition"
+            >
+              <Activity className="w-3 h-3" /> System Status
+            </Link>
+          </p>
+        </footer>
       </div>
     </div>
   );

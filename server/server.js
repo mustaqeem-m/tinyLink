@@ -21,9 +21,27 @@ function generateCode() {
   return result;
 }
 
-// --- 1. Health Check (Required by spec) ---
-app.get('/healthz', (req, res) => {
-  res.status(200).json({ ok: true, version: '1.0' });
+// --- 1. Health Check ---
+app.get('/healthz', async (req, res) => {
+  // Check DB connection
+  try {
+    await prisma.$queryRaw`SELECT 1`; // Simple query to check DB health
+
+    res.status(200).json({
+      ok: true,
+      version: '1.0',
+      uptime: process.uptime(), // Seconds the server has been running
+      timestamp: new Date(),
+      database: 'connected',
+    });
+  } catch (error) {
+    res.status(503).json({
+      ok: false,
+      version: '1.0',
+      uptime: process.uptime(),
+      database: 'disconnected',
+    });
+  }
 });
 
 // --- 2. Create Link ---
