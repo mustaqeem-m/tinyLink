@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Dashboard from './Dashboard';
-import Stats from './Stats';
-import Health from './Health';
+import Dashboard from './pages/DashBoard';
+import Stats from './pages/Stats';
+import Health from './pages/Health';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/code/:code" element={<Stats />} />
         <Route path="/healthz" element={<Health />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

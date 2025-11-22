@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE } from '../utils/constants';
 import {
   Trash2,
   Copy,
@@ -10,9 +11,6 @@ import {
   Activity,
 } from 'lucide-react';
 
-// API Base URL - change this if you deploy the backend elsewhere
-const API_BASE = 'http://localhost:5000';
-
 function Dashboard() {
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +18,6 @@ function Dashboard() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // --- 1. Fetch Links on Load ---
   useEffect(() => {
     fetchLinks();
   }, []);
@@ -36,7 +33,6 @@ function Dashboard() {
     }
   };
 
-  // --- 2. Create Link ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -47,14 +43,12 @@ function Dashboard() {
       setFormData({ url: '', shortCode: '' }); // Reset form
       fetchLinks(); // Refresh list
     } catch (err) {
-      // Show backend error message (e.g., "Code already in use")
       setError(err.response?.data?.error || 'Something went wrong');
     } finally {
       setSubmitting(false);
     }
   };
 
-  // --- 3. Delete Link ---
   const handleDelete = async (code) => {
     if (!confirm('Are you sure you want to delete this link?')) return;
     try {
@@ -65,7 +59,6 @@ function Dashboard() {
     }
   };
 
-  // --- 4. Copy to Clipboard ---
   const copyToClipboard = (code) => {
     const fullUrl = `${API_BASE}/${code}`;
     navigator.clipboard.writeText(fullUrl);
