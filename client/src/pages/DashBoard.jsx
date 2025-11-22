@@ -9,6 +9,7 @@ import {
   BarChart2,
   Loader2,
   Activity,
+  Search,
 } from 'lucide-react';
 
 function Dashboard() {
@@ -16,6 +17,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({ url: '', shortCode: '' });
   const [error, setError] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -64,6 +66,12 @@ function Dashboard() {
     navigator.clipboard.writeText(fullUrl);
     alert(`Copied: ${fullUrl}`);
   };
+
+  const filteredLinks = links.filter(
+    (link) =>
+      link.shortCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      link.originalUrl.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 p-8 font-sans text-gray-800">
@@ -127,6 +135,16 @@ function Dashboard() {
 
         {/* Links Table */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="p-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-2">
+            <Search className="w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search by code or URL..."
+              className="bg-transparent border-none focus:ring-0 text-gray-600 w-full outline-none placeholder-gray-400"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -145,14 +163,14 @@ function Dashboard() {
                       Loading...
                     </td>
                   </tr>
-                ) : links.length === 0 ? (
+                ) : filteredLinks.length === 0 ? (
                   <tr>
                     <td colSpan="5" className="p-8 text-center text-gray-400">
                       No links created yet.
                     </td>
                   </tr>
                 ) : (
-                  links.map((link) => (
+                  filteredLinks.map((link) => (
                     <tr
                       key={link.id}
                       className="hover:bg-gray-50/50 transition group"
